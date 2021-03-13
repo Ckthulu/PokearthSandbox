@@ -49,6 +49,26 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutBattleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="180dp">
+
+            <TextView
+                android:id="@+id/battleText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:text="Battle text goes here."
+                android:textAlignment="center">
+
+            </TextView>
+
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/linearLayoutPokemonNames"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -175,16 +195,30 @@
                 android:text="Heal" />
         </LinearLayout>
 
-        <Button
-            android:id="@id/newDuoButton"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="390dp"
-            android:layout_marginRight="5dp"
-            android:onClick="onGenerateButtonClick"
 
-            android:text="Generate New Duo" />
+        <LinearLayout
+            android:id="@id/linearLayoutBottomButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center|bottom"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@id/newDuoButton"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="15dp"
+                android:onClick="onGenerateButtonClick"
+                android:text="Generate New Duo"
+
+
+                />
+        </LinearLayout>
+
+        <!--            android:layout_marginTop="390dp"-->
 
     </RelativeLayout>
 
