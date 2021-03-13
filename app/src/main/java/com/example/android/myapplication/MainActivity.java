@@ -1,33 +1,24 @@
 package com.example.android.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.os.HandlerCompat;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import java.io.InputStream;
-import java.net.URL;
+import org.w3c.dom.Text;
+
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /* Pokeapi imports */
 import me.sargunvohra.lib.pokekotlin.client.PokeApi;
 import me.sargunvohra.lib.pokekotlin.client.PokeApiClient;
-import me.sargunvohra.lib.pokekotlin.model.Pokemon;
-import me.sargunvohra.lib.pokekotlin.model.PokemonSpecies;
-import me.sargunvohra.lib.pokekotlin.model.PokemonSprites;
 
 public class MainActivity extends AppCompatActivity {
     PokeApi pokeApi = new PokeApiClient();
@@ -39,43 +30,104 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    //TODO make damage amounts actually reflect the attack modifier logic
     @SuppressLint("SetTextI18n")
     public void onPokemon1AttackButtonClick(View v) {
         if (po[0] != null && po[1] != null) {
-            po[1].health.takeDamage((int) (Math.random() * 50));
+            if (po[1].health.getCurrentHP() != 0) {
+                int damage = (int) (Math.random() * 50);
+                po[1].health.takeDamage(damage);
 
-            TextView pokeHP2 = (TextView) findViewById(R.id.pokemon_2_HP);
-            pokeHP2.setText(po[1].health.getCurrentHP() + " HP");
+                TextView pokeHP2 = (TextView) findViewById(R.id.pokemon_2_HP);
+                pokeHP2.setText(po[1].health.getCurrentHP() + " HP");
+
+                TextView battleText = (TextView) findViewById(R.id.battleText);
+                double matchupEffectivenessResult = po[0].getMatchupEffectiveness(po[1]);
+                if (matchupEffectivenessResult == 0.0) {
+                    // no effect
+                    battleText.setText(po[0].getName() + " attacked " + po[1].getName() + " with no effect...");
+                } else if (matchupEffectivenessResult > 1) {
+                    //super effective
+                    battleText.setText(po[0].getName() + " attacked " + po[1].getName() + " for " + damage + " damage! Super effective!");
+                } else if (matchupEffectivenessResult < 1) {
+                    // not very effective
+                    battleText.setText(po[0].getName() + " attacked " + po[1].getName() + " for " + damage + " damage! Not very effective...");
+                } else {
+                    battleText.setText(po[0].getName() + " attacked " + po[1].getName() + " for " + damage + " damage!");
+                }
+            } else {
+                TextView battleText = (TextView) findViewById(R.id.battleText);
+                battleText.setText("You can't do that! " + po[1].getName() + " is already fainted!");
+            }
         }
     }
 
+    //TODO make damage amounts actually reflect the attack modifier logic
     @SuppressLint("SetTextI18n")
     public void onPokemon2AttackButtonClick(View v) {
         if (po[0] != null && po[1] != null) {
-            po[0].health.takeDamage((int) (Math.random() * 50));
+            if (po[0].health.getCurrentHP() != 0) {
+                int damage = (int) (Math.random() * 50);
+                po[0].health.takeDamage(damage);
 
-            TextView pokeHP1 = (TextView) findViewById(R.id.pokemon_1_HP);
-            pokeHP1.setText(po[0].health.getCurrentHP() + " HP");
+                TextView pokeHP1 = (TextView) findViewById(R.id.pokemon_1_HP);
+                pokeHP1.setText(po[0].health.getCurrentHP() + " HP");
+
+                TextView battleText = (TextView) findViewById(R.id.battleText);
+                double matchupEffectivenessResult = po[1].getMatchupEffectiveness(po[0]);
+                if (matchupEffectivenessResult == 0.0) {
+                    // no effect
+                    battleText.setText(po[1].getName() + " attacked " + po[0].getName() + " with no effect...");
+                } else if (matchupEffectivenessResult > 1) {
+                    //super effective
+                    battleText.setText(po[1].getName() + " attacked " + po[0].getName() + " for " + damage + " damage! Super effective!");
+                } else if (matchupEffectivenessResult < 1) {
+                    // not very effective
+                    battleText.setText(po[1].getName() + " attacked " + po[0].getName() + " for " + damage + " damage! Not very effective...");
+                } else {
+                    battleText.setText(po[1].getName() + " attacked " + po[0].getName() + " for " + damage + " damage!");
+                }
+
+
+            } else {
+                TextView battleText = (TextView) findViewById(R.id.battleText);
+                battleText.setText("You can't do that! " + po[0].getName() + " is already fainted!");
+            }
+
         }
     }
 
     @SuppressLint("SetTextI18n")
     public void onPokemon1HealButtonClick(View v) {
         if (po[0] != null && po[1] != null) {
-            po[0].health.healDamage((int) (Math.random() * 50));
+            if (po[0].health.getCurrentHP() != po[0].health.getMaxHP()) {
+                int previousHealth = po[0].health.getCurrentHP();
+                int healAmount = (int) (Math.random() * 50);
+                po[0].health.healDamage((int) healAmount);
 
-            TextView pokeHP1 = (TextView) findViewById(R.id.pokemon_1_HP);
-            pokeHP1.setText(po[0].health.getCurrentHP() + " HP");
+                TextView pokeHP1 = (TextView) findViewById(R.id.pokemon_1_HP);
+                pokeHP1.setText(po[0].health.getCurrentHP() + " HP");
+
+                TextView battleText = (TextView) findViewById(R.id.battleText);
+                battleText.setText(po[0].getName() + " healed for " + (po[0].health.getCurrentHP() - previousHealth) + " hit points!");
+            }
         }
     }
 
     @SuppressLint("SetTextI18n")
     public void onPokemon2HealButtonClick(View v) {
         if (po[0] != null && po[1] != null) {
-            po[1].health.healDamage((int) (Math.random() * 30));
+            if (po[1].health.getCurrentHP() != po[1].health.getMaxHP()) {
+                int previousHealth = po[1].health.getCurrentHP();
+                int healAmount = (int) (Math.random() * 50);
+                po[1].health.healDamage((int) healAmount);
 
-            TextView pokeHP2 = (TextView) findViewById(R.id.pokemon_2_HP);
-            pokeHP2.setText(po[1].health.getCurrentHP() + " HP");
+                TextView pokeHP2 = (TextView) findViewById(R.id.pokemon_2_HP);
+                pokeHP2.setText(po[1].health.getCurrentHP() + " HP");
+
+                TextView battleText = (TextView) findViewById(R.id.battleText);
+                battleText.setText(po[1].getName() + " healed for " + (po[1].health.getCurrentHP() - previousHealth) + " hit points!");
+            }
         }
     }
 
@@ -83,57 +135,66 @@ public class MainActivity extends AppCompatActivity {
     // the @SuppressLint allows string literals in the onButtonClick function
     @SuppressLint("SetTextI18n")
     public void onGenerateButtonClick(View v) {
-        Random rand = new Random();
-        // final Integer[] myPokeNums = {null, null};
-//        final int myPokeNum1 = rand.nextInt(151) + 1; // get a random number between 1 and 151 inclusive
-//        final int myPokeNum2 = rand.nextInt(151) + 1; // get a random number between 1 and 151 inclusive
-        //final boolean []isShiny = {rand.nextDouble() <= 0.25, rand.nextDouble() <= 0.25} ;
 
+        GenerateRunnable runnable = new GenerateRunnable();
+        new Thread(runnable).start();
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                for (int i = 0; i < 2; i++) {
-                    po[i] = new PokeObject(rand.nextInt(151) + 1);
-                }
-                ;
-            }
-        });
-
-
-        thread.start(); // start the thread
-        // wait for thread to finish before continuing
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            // oops
-        }
 
         /*
         If no data populated display error message
          */
 
-        // grab reference to relevant data fields
-        TextView pokeName1 = (TextView) findViewById(R.id.pokemon_1_name);
-        TextView pokeName2 = (TextView) findViewById(R.id.pokemon_2_name);
-
-        pokeName1.setText(po[0].getName());
-        pokeName2.setText(po[1].getName());
-
-        ImageView image1 = (ImageView) findViewById(R.id.pokemon_1_sprite);
-        ImageView image2 = (ImageView) findViewById(R.id.pokemon_2_sprite);
-
-        // set the image accordingly
-        image1.setImageBitmap(po[0].getBitmap());
-        image2.setImageBitmap(po[1].getBitmap());
-
-        TextView pokeHP1 = (TextView) findViewById(R.id.pokemon_1_HP);
-        TextView pokeHP2 = (TextView) findViewById(R.id.pokemon_2_HP);
-
-        pokeHP1.setText(po[0].health.getCurrentHP() + " HP");
-        pokeHP2.setText(po[1].health.getCurrentHP() + " HP");
-
-
     } // end onButtonClick
+
+    class GenerateRunnable implements Runnable {
+        Random rand = new Random();
+
+        @Override
+        public void run() {
+            Looper.prepare();
+            for (int i = 0; i < 2; i++) {
+                po[i] = new PokeObject(rand.nextInt(151) + 1);
+            }
+
+            runOnUiThread(new Runnable() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void run() {
+                    // grab reference to relevant data fields
+                    TextView pokeName1 = (TextView) findViewById(R.id.pokemon_1_name);
+                    TextView pokeName2 = (TextView) findViewById(R.id.pokemon_2_name);
+
+                    pokeName1.setText(po[0].getName());
+                    pokeName2.setText(po[1].getName());
+
+                    ImageView image1 = (ImageView) findViewById(R.id.pokemon_1_sprite);
+                    ImageView image2 = (ImageView) findViewById(R.id.pokemon_2_sprite);
+
+                    // set the image accordingly
+                    image1.setImageBitmap(po[0].getBitmap());
+                    image2.setImageBitmap(po[1].getBitmap());
+
+                    TextView pokeHP1 = (TextView) findViewById(R.id.pokemon_1_HP);
+                    TextView pokeHP2 = (TextView) findViewById(R.id.pokemon_2_HP);
+
+                    pokeHP1.setText(po[0].health.getCurrentHP() + " HP");
+                    pokeHP2.setText(po[1].health.getCurrentHP() + " HP");
+
+                    TextView battleText = (TextView) findViewById(R.id.battleText);
+                    battleText.setText("");
+
+                    View pokeAttackButton1 = findViewById(R.id.button1);
+                    View pokeAttackButton2 = findViewById(R.id.button2);
+
+                    pokeAttackButton1.setBackgroundColor(Color.parseColor(po[0].getTypeColorString(0)));
+                    pokeAttackButton2.setBackgroundColor(Color.parseColor(po[1].getTypeColorString(0)));
+
+
+                } // end run
+
+
+            }); // end run
+
+        }
+    }
 }
