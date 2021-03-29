@@ -30,4 +30,9 @@ public class TrainerDataSource
         List<Trainer> savedTrainer = trainerDao.getAllPokemon();
         return savedTrainer;
     }
+
+    public void deleteAllFromTable()
+    {
+        trainerDao.deleteAllFromTable();
+    }
 }
