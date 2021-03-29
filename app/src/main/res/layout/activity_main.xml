@@ -13,6 +13,32 @@
         tools:layout_editor_absoluteX="91dp"
         tools:layout_editor_absoluteY="84dp">
 
+        <LinearLayout
+            android:id="@+id/linearLayoutSaveLoadTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onSaveButtonClick"
+                android:text="Save Duo" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/loadButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onLoadButtonClick"
+                android:text="Load Duo" />
+        </LinearLayout>
+
         <RelativeLayout
             android:id="@id/spritesRelativeLayout"
             android:layout_width="wrap_content"
