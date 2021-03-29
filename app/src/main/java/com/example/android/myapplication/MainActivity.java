@@ -203,19 +203,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    public void onSaveButtonClick(View v) {
-
+    public void onSaveButtonClick(View v)
+    {
         GenerateSavedRunnable runnable = new GenerateSavedRunnable();
         new Thread(runnable).start();
-
-
     } // end onButtonClick
 
     class GenerateSavedRunnable implements Runnable {
 
         @Override
-        public void run() {
-
+        public void run()
+        {
             if (dataSource != null)
             {
                 Log.d("onSaveButtonClick", "creating saved pokemon");
@@ -228,46 +226,6 @@ public class MainActivity extends AppCompatActivity {
             }
             else
                 Log.d("SaveButton", " db is null ");
-
-            runOnUiThread(new Runnable() {
-                @SuppressLint("SetTextI18n")
-                @Override
-                public void run() {
-                    // grab reference to relevant data fields
-                    TextView pokeName1 = (TextView) findViewById(R.id.pokemon_1_name);
-                    TextView pokeName2 = (TextView) findViewById(R.id.pokemon_2_name);
-
-                    pokeName1.setText(po[0].getName());
-                    pokeName2.setText(po[1].getName());
-
-                    ImageView image1 = (ImageView) findViewById(R.id.pokemon_1_sprite);
-                    ImageView image2 = (ImageView) findViewById(R.id.pokemon_2_sprite);
-
-                    // set the image accordingly
-                    image1.setImageBitmap(po[0].getBitmap());
-                    image2.setImageBitmap(po[1].getBitmap());
-
-                    TextView pokeHP1 = (TextView) findViewById(R.id.pokemon_1_HP);
-                    TextView pokeHP2 = (TextView) findViewById(R.id.pokemon_2_HP);
-
-                    pokeHP1.setText(po[0].health.getCurrentHP() + " HP");
-                    pokeHP2.setText(po[1].health.getCurrentHP() + " HP");
-
-                    TextView battleText = (TextView) findViewById(R.id.battleText);
-                    battleText.setText("");
-
-                    View pokeAttackButton1 = findViewById(R.id.button1);
-                    View pokeAttackButton2 = findViewById(R.id.button2);
-
-                    pokeAttackButton1.setBackgroundColor(Color.parseColor(po[0].getTypeColorString(0)));
-                    pokeAttackButton2.setBackgroundColor(Color.parseColor(po[1].getTypeColorString(0)));
-
-
-                } // end run
-
-
-            }); // end run
-
         }
     }
 
@@ -342,19 +300,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    public void onClearDataButtonClick(View v) {
-
+    public void onClearDataButtonClick(View v)
+    {
         GenerateClearDataRunnable runnable = new GenerateClearDataRunnable();
         new Thread(runnable).start();
-
-
     } // end onButtonClick
 
-    class GenerateClearDataRunnable implements Runnable {
-
+    class GenerateClearDataRunnable implements Runnable
+    {
         @Override
-        public void run() {
-
+        public void run()
+        {
             if (dataSource != null)
             {
                 Log.d("onClearDataButtonClick", "deleting saved pokemon");
@@ -362,46 +318,6 @@ public class MainActivity extends AppCompatActivity {
             }
             else
                 Log.d("ClearDataButtonClick", " db is null ");
-
-            runOnUiThread(new Runnable() {
-                @SuppressLint("SetTextI18n")
-                @Override
-                public void run() {
-                    // grab reference to relevant data fields
-                    TextView pokeName1 = (TextView) findViewById(R.id.pokemon_1_name);
-                    TextView pokeName2 = (TextView) findViewById(R.id.pokemon_2_name);
-
-                    pokeName1.setText(po[0].getName());
-                    pokeName2.setText(po[1].getName());
-
-                    ImageView image1 = (ImageView) findViewById(R.id.pokemon_1_sprite);
-                    ImageView image2 = (ImageView) findViewById(R.id.pokemon_2_sprite);
-
-                    // set the image accordingly
-                    image1.setImageBitmap(po[0].getBitmap());
-                    image2.setImageBitmap(po[1].getBitmap());
-
-                    TextView pokeHP1 = (TextView) findViewById(R.id.pokemon_1_HP);
-                    TextView pokeHP2 = (TextView) findViewById(R.id.pokemon_2_HP);
-
-                    pokeHP1.setText(po[0].health.getCurrentHP() + " HP");
-                    pokeHP2.setText(po[1].health.getCurrentHP() + " HP");
-
-                    TextView battleText = (TextView) findViewById(R.id.battleText);
-                    battleText.setText("");
-
-                    View pokeAttackButton1 = findViewById(R.id.button1);
-                    View pokeAttackButton2 = findViewById(R.id.button2);
-
-                    pokeAttackButton1.setBackgroundColor(Color.parseColor(po[0].getTypeColorString(0)));
-                    pokeAttackButton2.setBackgroundColor(Color.parseColor(po[1].getTypeColorString(0)));
-
-
-                } // end run
-
-
-            }); // end run
-
         }
     }
 }
